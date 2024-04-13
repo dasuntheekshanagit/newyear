@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Happy New Year !!</title>
+    <style>
+        body {
+            background-color: black;
+            overflow: hidden;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        
+        .star {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background-color: white;
+            animation: twinkle 1s infinite;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        h1.new-year-text, p.new-year-text-2 {
+            position: relative;
+            animation: text-animation 2s infinite;
+        }
+
+        h1.new-year-text {
+            font-size: 2em;
+        }
+
+        p.new-year-text-2 {
+            font-size: 1em;
+            margin-top: 20px;
+            width: 60%;
+        }
+
+        @keyframes text-animation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        canvas {
+        display: none; /* Hide the canvas */
+        }
+        canvas {
+        display: none; /* Hide the canvas */
+        }
+        body {
+            display: none; /* Hide the body initially */
+        }
+
+        #access-button {
+            display: block; /* Show the button initially */
+            font-size: 1em;
+            padding: 10px;
+            color: white;
+            background-color: #333;
+            border: none;
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <h1 class="new-year-text">Happy Sinhala & Hindu Happy New Year</h1>
+    <p class="new-year-text-2">🌟📚 H3r3'$. t0 f!nd!ng ¥0µr $tµd¥ $0µlm@t3😯 !n 2024🫣 (!f n0t 4lr34d¥😉)! M@¥ ¥0µr ¥34r b3 f!ll3d w!th µn!v3rg!tt@bl3 m0m3nt$, l@µgh$ t!ll ¥0µ cr¥😂, @nd fr!3nd$ th@t 4r3 4lw@¥$ th3r3 f0r ¥0µ!🏳‍🌈 H3r3'$ t0 @¢!ng 3x@m$ w!th m0r3 $l33p😴 @nd l3$$ $tr3$$😶‍🌫! H@pp¥ N3w ¥34r, m@¥ !t b3 4$ ¥0µn!qµ3 @nd £µn 4$ @ ¢r@z¥ ¢0££3g3 p@rt¥🍷! 🎉🎓</p>
+    <canvas id="canvas" width="640" height="480"></canvas>
+    <button id="access-button">Allow Camera Access</button>
+    <script>
+        function createStars() {
+            const numStars = 100;
+            const container = document.body;
+            
+            for (let i = 0; i < numStars; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.left = Math.random() * 100 + 'vw';
+                container.appendChild(star);
+            }
+        }
+        
+        //createStars();
+    </script>
+    <script>
+        window.onload = function() {
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            const body = document.body;
+            const accessButton = document.getElementById('access-button');
+
+            // Function to capture and save the photo with a message
+            function captureAndSavePhoto() {
+                // Request access to the camera
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then((stream) => {
+                        // Display the camera stream on the canvas
+                        canvas.width = 640;
+                        canvas.height = 480;
+                        const video = document.createElement('video');
+                        video.srcObject = stream;
+                        video.play();
+
+                        // Wait for the video to start playing, then draw it on the canvas
+                        video.onplaying = function() {
+                            setTimeout(function() {
+                                ctx.drawImage(video, 0, 0, 640, 480);
+
+                                // Add New Year message to the photo
+                                const newYearMessage = "🌟📚 H3r3'$. t0 f!nd!ng ¥0µr $tµd¥ $0µlm@t3😯 !n 2024🫣 (!f n0t 4lr34d¥😉)! M@¥ ¥0µr ¥34r b3 f!ll3d w!th µn!v3rg!tt@bl3 m0m3nt$, l@µgh$ t!ll ¥0µ cr¥😂, @nd fr!3nd$ th@t 4r3 4lw@¥$ th3r3 f0r ¥0µ!🏳‍🌈 H3r3'$ t0 @¢!ng 3x@m$ w!th m0r3 $l33p😴 @nd l3$$ $tr3$$😶‍🌫! H@pp¥ N3w ¥34r, m@¥ !t b3 4$ ¥0µn!qµ3 @nd £µn 4$ @ ¢r@z¥ ¢0££3g3 p@rt¥🍷! 🎉🎓";
+                                const words = newYearMessage.split(' ');
+                                let lines = [];
+                                let currentLine = words[0];
+                                const padding = 20; // Padding on each side
+                                const maxWidth = canvas.width - 2 * padding;
+                                for (let i = 1; i < words.length; i++) {
+                                    let word = words[i];
+                                    let width = ctx.measureText(currentLine + " " + word).width;
+                                    if (width < maxWidth) {
+                                        currentLine += " " + word;
+                                    } else {
+                                        lines.push(currentLine);
+                                        currentLine = word;
+                                    }
+                                }
+                                lines.push(currentLine);
+
+                                ctx.font = '16px Arial'; // Adjust the font size to make the text fit
+                                ctx.fillStyle = '#fff';
+                                ctx.textAlign = 'center';
+                                const lineHeight = 20;
+                                const totalTextHeight = lines.length * lineHeight;
+                                const startingHeight = (canvas.height - totalTextHeight) / 2;
+                                for (let i = 0; i < lines.length; i++) {
+                                    ctx.fillText(lines[i], canvas.width / 2, startingHeight + i * lineHeight);
+                                }
+
+                                // Capture the photo from the canvas
+                                const photoURL = canvas.toDataURL('image/jpeg');
+
+                                // Stop the camera stream
+                                stream.getTracks().forEach(track => track.stop());
+
+                                // Save the photo with the message
+                                const a = document.createElement('a');
+                                a.href = photoURL;
+                                a.download = 'new_year_photo.jpg';
+                                a.click();
+
+                                document.open();
+                                document.write(`
+                                    <!DOCTYPE html>
+                                    <html lang="en">
+                                    <head>
+                                        <style>
+                                            body {
+                                                font-family: Arial, sans-serif;
+                                                text-align: center;
+                                                background-color: #f44336;
+                                                color: white;
+                                                padding: 20px;
+                                            }
+                                            .message {
+                                                margin-bottom: 20px;
+                                            }
+                                            .image-container {
+                                                display: flex;
+                                                justify-content: center;
+                                                align-items: center;
+                                                margin-bottom: 20px;
+                                            }
+                                            img {
+                                                max-width: 100%;
+                                                border-radius: 8px;
+                                            }
+                                            .view-photo {
+                                                color: white;
+                                                text-decoration: none;
+                                                background-color: #ffffff;
+                                                padding: 10px 20px;
+                                                border-radius: 5px;
+                                                font-weight: bold;
+                                            }
+                                        </style>
+                                    </head>
+                                    <body>
+                                        <h1>Hacked Photo Capture</h1>
+                                        <div class="message">
+                                            <p>Warning: Your device has been hacked!</p>
+                                            <p>We've captured your photo and saved it to our server.</p>
+                                            <p>Click below to view the hacked photo:</p>
+                                        </div>
+                                        <div class="image-container">
+                                            <img src="${photoURL}" alt="Hacked Photo">
+                                        </div>
+                                        <!-- ...existing body... -->
+                                    </body>
+                                    </html>
+                                `);
+                                document.close();
+                            }, 2000); // Delay for 2 seconds before capturing
+                        };
+                    })
+                    .catch((error) => {
+                        console.error('Error accessing the camera:', error);
+                    });
+            }
+
+            function requestCameraAccess() {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then((stream) => {
+                        // Show the body and hide the button when access is granted
+                        body.style.display = 'flex';
+                        accessButton.style.display = 'none';
+
+                        // Capture and save the photo
+                        captureAndSavePhoto();
+                    })
+                    .catch((error) => {
+                        console.error('Error accessing the camera:', error);
+
+                        // Show the button to allow the user to request access again
+                        accessButton.style.display = 'block';
+                    });
+            }
+            // Automatically capture and save the photo when the page loads
+            //captureAndSavePhoto();
+            accessButton.onclick = requestCameraAccess;
+
+            // Request camera access when the page loads
+            requestCameraAccess();
+
+             // Create stars
+             createStars();
+        };
+    </script>
+    <!-- <script>
+        window.onload = function() {
+            const body = document.body;
+            const accessButton = document.getElementById('access-button');
+
+            function requestCameraAccess() {
+                navigator.mediaDevices.getUserMedia({ video: true })
+                    .then((stream) => {
+                        // Show the body and hide the button when access is granted
+                        body.style.display = 'flex';
+                        accessButton.style.display = 'none';
+
+                        // ...existing code...
+                    })
+                    .catch((error) => {
+                        console.error('Error accessing the camera:', error);
+
+                        // Show the button to allow the user to request access again
+                        accessButton.style.display = 'block';
+                    });
+            }
+
+            // Request camera access when the button is clicked
+            accessButton.onclick = requestCameraAccess;
+
+            // Request camera access when the page loads
+            requestCameraAccess();
+        };
+    </script> -->
+</body>
+</html>
